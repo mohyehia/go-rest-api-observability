@@ -19,3 +19,5 @@ services:
       - host.docker.internal:host-gateway
     volumes:
       - ./docker/otel-volume/prometheus/prometheus.yaml:/otel-lgtm/prometheus.yaml
+      - ./docker/otel-volume/grafana/dashboards/dashboards-provisioning.yaml:/otel-lgtm/grafana/conf/provisioning/dashboards/custom.yaml:ro
+      - ./docker/otel-volume/grafana/dashboards/:/otel-lgtm/grafana/conf/provisioning/dashboards/custom/

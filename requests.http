@@ -1,0 +1,11 @@
+### GET request to health check
+GET localhost:9091/health
+
+### Metrics endpoint
+GET localhost:9091/metrics
+
+### Get posts API
+GET localhost:9091/posts
+
+### Get post by ID
+GET localhost:9091/posts/1
