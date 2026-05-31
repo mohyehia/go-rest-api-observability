@@ -8,4 +8,4 @@ GET localhost:9091/metrics
 GET localhost:9091/posts
 
 ### Get post by ID
-GET localhost:9091/posts/1
+GET localhost:9091/posts/5

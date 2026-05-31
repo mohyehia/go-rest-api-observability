@@ -8,21 +8,22 @@ import (
 )
 
 type PostsClient struct {
-	client *http.Client
+	client  *http.Client
+	baseURL string
 }
 
-func NewPostsClient(client *http.Client) *PostsClient {
+func NewPostsClient(client *http.Client, baseURL string) *PostsClient {
 	return &PostsClient{
-		client: client,
+		client:  client,
+		baseURL: baseURL,
 	}
 }
 
 func (pc *PostsClient) GetPosts() ([]Post, error) {
-	res, err := pc.client.Get("https://json-placeholder.mock.beeceptor.com/posts")
+	res, err := pc.client.Get(pc.baseURL + "/posts")
 	if err != nil {
 		return nil, err
 	}
-	log.Printf("Response status: %s\n", res.Status)
 	defer func() {
 		err := res.Body.Close()
 		if err != nil {
@@ -41,12 +42,11 @@ func (pc *PostsClient) GetPosts() ([]Post, error) {
 	return posts, nil
 }
 
-func (pc *PostsClient) GetPost(id string) (*Post, error) {
-	res, err := pc.client.Get(fmt.Sprintf("https://json-placeholder.mock.beeceptor.com/posts/%s", id))
+func (pc *PostsClient) GetPost(id int) (*Post, error) {
+	res, err := pc.client.Get(fmt.Sprintf("%s/posts/%d", pc.baseURL, id))
 	if err != nil {
 		return nil, err
 	}
-	log.Printf("Response status: %s\n", res.Status)
 	defer func() {
 		err := res.Body.Close()
 		if err != nil {

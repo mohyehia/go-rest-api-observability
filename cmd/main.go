@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/mohyehia/rest-api-observability/internal/config"
 	"github.com/mohyehia/rest-api-observability/internal/core"
 	"github.com/mohyehia/rest-api-observability/internal/health"
 	"github.com/mohyehia/rest-api-observability/internal/post"
@@ -14,6 +15,9 @@ import (
 
 func main() {
 
+	// load config
+	cfg := config.Load()
+
 	// Create prometheus registry
 	registry := prometheus.NewRegistry()
 
@@ -21,7 +25,7 @@ func main() {
 
 	postsClient := post.NewPostsClient(&http.Client{
 		Timeout: 5 * time.Second,
-	})
+	}, cfg.PostsBaseURL)
 
 	appMetrics := core.NewApplicationMetrics(registry)
 
@@ -35,7 +39,7 @@ func main() {
 	post.RegisterHandlers(mux, postsClient, appMetrics)
 
 	server := &http.Server{
-		Addr:         ":9091",
+		Addr:         ":" + cfg.ServerPort,
 		Handler:      mux,
 		TLSConfig:    nil,
 		ReadTimeout:  5 * time.Second,   // Max time to read the request body
